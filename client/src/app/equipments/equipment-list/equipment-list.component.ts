@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Equipment } from 'src/app/_models/equipment';
 import { EquipmentsService } from 'src/app/_services/equipments.service';
 
@@ -8,18 +9,11 @@ import { EquipmentsService } from 'src/app/_services/equipments.service';
   styleUrls: ['./equipment-list.component.css']
 })
 export class EquipmentListComponent implements OnInit {
-  equipments: Equipment[];
+  equipments$: Observable<Equipment[]>;
 
   constructor(private equipmentService: EquipmentsService) { }
 
   ngOnInit(): void {
-    this.loadEquipments();
+    this.equipments$ = this.equipmentService.getEquipments();
   }
-
-  loadEquipments() {
-    this.equipmentService.getEquipments().subscribe(equipments => {
-      this.equipments = equipments;
-    })
-  }
-
 }

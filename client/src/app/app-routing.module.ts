@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EquipmentDetailComponent } from './equipments/equipment-detail/equipment-detail.component';
+import { EquipmentEditComponent } from './equipments/equipment-edit/equipment-edit.component';
 import { EquipmentListComponent } from './equipments/equipment-list/equipment-list.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
@@ -10,6 +11,7 @@ import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from './_guards/auth.guard';
+import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -20,6 +22,7 @@ const routes: Routes = [
     children: [
       { path: 'equipments', component: EquipmentListComponent },
       { path: 'equipments/:username', component: EquipmentDetailComponent },
+      { path: 'equipment/edit', component: EquipmentEditComponent, canDeactivate: [PreventUnsavedChangesGuard] },
       { path: 'lists', component: ListsComponent },
       { path: 'messages', component: MessagesComponent },
       { path: 'register', component: RegisterComponent }
