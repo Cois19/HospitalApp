@@ -1,1 +1,5 @@
-<p>equipment-list works!</p>
+<div class="row">
+    <div *ngFor="let equipment of equipments" class="col-2">
+        <app-equipment-card [equipment]="equipment"></app-equipment-card>
+    </div>
+</div>

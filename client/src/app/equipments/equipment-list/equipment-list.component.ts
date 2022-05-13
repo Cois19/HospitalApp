@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Equipment } from 'src/app/_models/equipment';
+import { EquipmentsService } from 'src/app/_services/equipments.service';
 
 @Component({
   selector: 'app-equipment-list',
@@ -6,10 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./equipment-list.component.css']
 })
 export class EquipmentListComponent implements OnInit {
+  equipments: Equipment[];
 
-  constructor() { }
+  constructor(private equipmentService: EquipmentsService) { }
 
   ngOnInit(): void {
+    this.loadEquipments();
+  }
+
+  loadEquipments() {
+    this.equipmentService.getEquipments().subscribe(equipments => {
+      this.equipments = equipments;
+    })
   }
 
 }

@@ -1,1 +1,50 @@
-<p>equipment-detail works!</p>
+<div class="row" *ngIf="equipment">
+    <div class="col-4">
+        <div class="card">
+            <img src="{{equipment.photoUrl || './assets/user.webp'}}" alt="{{equipment.knownAs}}" 
+                class="card-img-top img-thumbnail">
+            <div class="card-body">
+                <div>
+                    <strong>Location:</strong>
+                    <p>{{equipment.category}}, {{equipment.hospital}}</p>
+                </div>
+                <div>
+                    <strong>Age:</strong>
+                    <p>{{equipment.age}}</p>
+                </div>
+                <div>
+                    <strong>Last Used:</strong>
+                    <p>{{equipment.lastActive}}</p>
+                </div>
+                <div>
+                    <strong>Registered since:</strong>
+                    <p>{{equipment.created}}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group d-flex">
+                    <button class="btn btn-primary">Put in Maintenance</button>
+                    <button class="btn btn-success">Write Notes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-8">
+        <tabset class="member-tabset">
+            <tab heading="About {{equipment.knownAs}}">
+                <h4>Description</h4>
+                <p>{{equipment.description}}</p>
+                <h4>How To Use</h4>
+                <p>{{equipment.howToUse}}</p>
+            </tab>
+            <tab heading="Photos">
+                <ngx-gallery [options]="galleryOptions" [images]="galleryImages" 
+                    style="display: inline-block; margin-bottom: 20px;"></ngx-gallery>
+            </tab>
+            <tab heading="Notes">
+                <p>Notes will go here</p>
+            </tab>
+        </tabset>
+    </div>
+</div>

@@ -8,6 +8,7 @@ import { TestErrorsComponent } from './errors/test-errors/test-errors.component'
 import { HomeComponent } from './home/home.component';
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
+import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from './_guards/auth.guard';
 
 const routes: Routes = [
@@ -18,9 +19,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'equipments', component: EquipmentListComponent },
-      { path: 'equipments/:id', component: EquipmentDetailComponent },
+      { path: 'equipments/:username', component: EquipmentDetailComponent },
       { path: 'lists', component: ListsComponent },
-      { path: 'messages', component: MessagesComponent }
+      { path: 'messages', component: MessagesComponent },
+      { path: 'register', component: RegisterComponent }
     ]
   },
   { path: 'errors', component: TestErrorsComponent },
