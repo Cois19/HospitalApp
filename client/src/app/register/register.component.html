@@ -1,21 +1,55 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-4">
-      <form #registerForm="ngForm" (ngSubmit)="register()" autocomplete="off">
+      <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" autocomplete="off">
         <h3 class="text-center text-primary">Register an equipment or admin</h3>
         <hr>
+
         <div class="form-group">
-          <input type="text" class="form-control" name="username" [(ngModel)]="model.username" placeholder="Username">
+          <label class="control-label" style="margin-right: 10px">Department: </label>
+          <label class="radio-inline">
+            <input type="radio" value="clinical" formControlName="department"> Clinical
+          </label>
+          <label class="radio-inline">
+            <input type="radio" value="nursing" formControlName="department" class="ml-3"> Nursing
+          </label>
+          <label class="radio-inline">
+            <input type="radio" value="supportive" formControlName="department" class="ml-3"> Supportive
+          </label>
+          <label class="radio-inline">
+            <input type="radio" value="technical" formControlName="department" class="ml-3"> Technical
+          </label>
+          <label class="radio-inline">
+            <input type="radio" value="administrative" formControlName="department" class="ml-3"> Administrative
+          </label>
         </div>
-        <div class="form-group">
-          <input type="password" class="form-control" name="password" [(ngModel)]="model.password"
-            placeholder="Password">
+
+        <app-text-input [formControl]="registerForm.controls['username']" [label]="'Username'"></app-text-input>
+        <app-text-input [formControl]="registerForm.controls['password']" [label]="'Password'" [type]="'password'">
+        </app-text-input>
+        <app-text-input [formControl]="registerForm.controls['confirmPassword']" [label]="'Confirm Password'"
+          [type]="'password'"></app-text-input>
+        <app-text-input [formControl]="registerForm.controls['knownAs']" [label]="'Known As'"></app-text-input>
+        <app-date-input [formControl]="registerForm.controls['dateOfProduction']" [label]="'Date of Production'"
+          [minDate]="minDate">
+        </app-date-input>
+        <app-text-input [formControl]="registerForm.controls['category']" [label]="'Category'"></app-text-input>
+        <app-text-input [formControl]="registerForm.controls['hospital']" [label]="'Hospital'"></app-text-input>
+
+        <div class="row" *ngIf="validationErrors.length > 0">
+          <ul class="text-danger">
+              <li *ngFor="let error of validationErrors">
+                  {{error}}
+              </li>
+          </ul>
         </div>
+
         <div class="form-group text-center">
-          <button class="btn btn-success mr-2" type="submit">Register</button>
+          <button [disabled]="!registerForm.valid" class="btn btn-success mr-2" type="submit">Register</button>
           <!-- <button class="btn btn-danger mr-2" (click)="cancel()" type="button">Cancel</button> -->
         </div>
       </form>
+
     </div>
   </div>
 </div>
