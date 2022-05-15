@@ -1,9 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Equipment } from '../_models/equipment';
+import { PaginatedResult } from '../_models/pagination';
+import { User } from '../_models/user';
+import { UserParams } from '../_models/userParams';
+import { AccountService } from './account.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,22 +15,58 @@ import { Equipment } from '../_models/equipment';
 export class EquipmentsService {
   baseUrl = environment.apiUrl;
   equipments: Equipment[] = [];
+  equipmentCache = new Map();
+  user: User;
+  userParams: UserParams;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private accountService: AccountService) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe(user => {
+      this.user = user;
+      this.userParams = new UserParams(user);
+    })
+  }
 
-  getEquipments() {
-    if (this.equipments.length > 0) return of(this.equipments);
-    return this.http.get<Equipment[]>(this.baseUrl + 'users').pipe(
-      map(equipments => {
-        this.equipments = equipments;
-        return equipments;
-      })
-    )
+  getUserParams() {
+    return this.userParams;
+  }
+
+  setUserParams(params: UserParams) {
+    this.userParams = params;
+  }
+
+  resetUserParams() {
+    this.userParams = new UserParams(this.user);
+    return this.userParams;
+  }
+
+  getEquipments(userParams: UserParams) {
+    var response = this.equipmentCache.get(Object.values(userParams).join('-'));
+    if (response) {
+      return of(response);
+    }
+
+    let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
+
+    params = params.append('minAge', userParams.minAge.toString());
+    params = params.append('maxAge', userParams.maxAge.toString());
+    params = params.append('department', userParams.department);
+    params = params.append('orderBy', userParams.orderBy);
+
+    return this.getPaginatedResult<Equipment[]>(this.baseUrl + 'users', params)
+      .pipe(map(response => {
+        this.equipmentCache.set(Object.values(userParams).join('-'), response);
+        return response;
+      }))
   }
 
   getEquipment(username: string) {
-    const equipment = this.equipments.find(x => x.username === username);
-    if (equipment !== undefined) return of(equipment);
+    const equipment = [...this.equipmentCache.values()]
+      .reduce((arr, elem) => arr.concat(elem.result), [])
+      .find((equipment: Equipment) => equipment.username === username);
+
+    if (equipment) {
+      return of(equipment);
+    }
     return this.http.get<Equipment>(this.baseUrl + 'users/' + username);
   }
 
@@ -45,5 +85,28 @@ export class EquipmentsService {
 
   deletePhoto(photoId: number) {
     return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
+  }
+
+  private getPaginatedResult<T>(url, params) {
+    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
+    return this.http.get<T>(url, { observe: 'response', params }).pipe(
+      map(response => {
+        paginatedResult.result = response.body;
+        if (response.headers.get('Pagination') !== null) {
+          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+        }
+
+        return paginatedResult;
+      })
+    );
+  }
+
+  private getPaginationHeaders(pageNumber: number, pageSize: number) {
+    let params = new HttpParams();
+
+    params = params.append('pageNumber', pageNumber.toString());
+    params = params.append('pageSize', pageSize.toString());
+
+    return params;
   }
 }

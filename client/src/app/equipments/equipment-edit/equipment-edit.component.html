@@ -22,11 +22,11 @@
                 </div>
                 <div>
                     <strong>Last Used:</strong>
-                    <p>{{equipment.lastActive}}</p>
+                    <p>{{equipment.lastActive | timeago}}</p>
                 </div>
                 <div>
                     <strong>Registered since:</strong>
-                    <p>{{equipment.created}}</p>
+                    <p>{{equipment.created | date: 'dd MMMM yyyy'}}</p>
                 </div>
             </div>
             <div class="card-footer">
