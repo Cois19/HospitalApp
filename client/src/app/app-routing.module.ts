@@ -8,10 +8,11 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
 import { TestErrorsComponent } from './errors/test-errors/test-errors.component';
 import { HomeComponent } from './home/home.component';
 import { ListsComponent } from './lists/lists.component';
-import { MessagesComponent } from './messages/messages.component';
+import { NotesComponent } from './notes/notes.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
+import { EquipmentDetailedResolver } from './_resolvers/equipment-detailed.resolver';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -21,10 +22,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'equipments', component: EquipmentListComponent },
-      { path: 'equipments/:username', component: EquipmentDetailComponent },
+      { path: 'equipments/:username', component: EquipmentDetailComponent, resolve: {equipment: EquipmentDetailedResolver} },
       { path: 'equipment/edit', component: EquipmentEditComponent, canDeactivate: [PreventUnsavedChangesGuard] },
       { path: 'lists', component: ListsComponent },
-      { path: 'messages', component: MessagesComponent },
+      { path: 'notes', component: NotesComponent },
       { path: 'register', component: RegisterComponent }
     ]
   },

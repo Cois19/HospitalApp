@@ -15,6 +15,7 @@ namespace API.Data
 
         public DbSet<AppUser> Users { get; set; }
         public DbSet<UserMark> Marks { get; set; }
+        public DbSet<Note> Notes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,6 +35,16 @@ namespace API.Data
                 .WithMany(l => l.MarkedByUsers)
                 .HasForeignKey(s => s.MarkedUserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Note>()
+                .HasOne(u => u.Recipient)
+                .WithMany(m => m.NotesReceived)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Note>()
+                .HasOne(u => u.Sender)
+                .WithMany(m => m.NotesSent)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
+import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Equipment } from 'src/app/_models/equipment';
+import { Note } from 'src/app/_models/note';
 import { EquipmentsService } from 'src/app/_services/equipments.service';
+import { NoteService } from 'src/app/_services/note.service';
 
 @Component({
   selector: 'app-equipment-detail',
@@ -10,15 +13,25 @@ import { EquipmentsService } from 'src/app/_services/equipments.service';
   styleUrls: ['./equipment-detail.component.css']
 })
 export class EquipmentDetailComponent implements OnInit {
+  @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
   equipment: Equipment;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
+  activeTab: TabDirective;
+  notes: Note[] = [];
 
 
-  constructor(private equipmentService: EquipmentsService, private route: ActivatedRoute) { }
+  constructor(private equipmentService: EquipmentsService, private route: ActivatedRoute, 
+    private noteService: NoteService) { }
 
   ngOnInit(): void {
-    this.loadEquipment();
+    this.route.data.subscribe(data => {
+      this.equipment = data.equipment;
+    })
+
+    this.route.queryParams.subscribe(params => {
+      params.tab ? this.selectTab(params.tab) : this.selectTab(0);
+    })
 
     this.galleryOptions = [
       {
@@ -26,10 +39,11 @@ export class EquipmentDetailComponent implements OnInit {
         height: '500px',
         imagePercent: 100,
         thumbnailsColumns: 4,
-        imageAnimation: NgxGalleryAnimation.Slide,
-        // preview: false
+        imageAnimation: NgxGalleryAnimation.Slide
       }
     ]
+    
+    this.galleryImages = this.getImages();
   }
 
   getImages(): NgxGalleryImage[] {
@@ -45,11 +59,21 @@ export class EquipmentDetailComponent implements OnInit {
     return imageUrls;
   }
 
-  loadEquipment() {
-    this.equipmentService.getEquipment(this.route.snapshot.paramMap.get('username')).subscribe(equipment => {
-      this.equipment = equipment;
-      this.galleryImages = this.getImages();
+  loadNotes() {
+    this.noteService.getNoteThread(this.equipment.username).subscribe(notes => {
+      this.notes = notes;
     })
+  }
+
+  selectTab(tabId: number) {
+    this.memberTabs.tabs[tabId].active = true;
+  }
+
+  onTabActivated(data: TabDirective) {
+    this.activeTab = data;
+    if (this.activeTab.heading === 'Notes' && this.notes.length === 0) {
+      this.loadNotes();
+    }
   }
 
 }

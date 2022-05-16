@@ -1,4 +1,4 @@
-<div class="row" *ngIf="equipment">
+<div class="row">
     <div class="col-4">
         <div class="card">
             <img src="{{equipment.photoUrl || './assets/user.webp'}}" alt="{{equipment.knownAs}}" 
@@ -24,26 +24,26 @@
             <div class="card-footer">
                 <div class="btn-group d-flex">
                     <button class="btn btn-primary">Put in Maintenance</button>
-                    <button class="btn btn-success">Write Notes</button>
+                    <button (click)="selectTab(2)" class="btn btn-success">Write Notes</button>
                 </div>
             </div>
         </div>
     </div>
     
     <div class="col-8">
-        <tabset class="member-tabset">
-            <tab heading="About {{equipment.knownAs}}">
+        <tabset class="member-tabset" #memberTabs>
+            <tab heading="About {{equipment.knownAs}}" (selectTab)="onTabActivated($event)">
                 <h4>Description</h4>
                 <p>{{equipment.description}}</p>
                 <h4>How To Use</h4>
                 <p>{{equipment.howToUse}}</p>
             </tab>
-            <tab heading="Photos">
+            <tab heading="Photos" (selectTab)="onTabActivated($event)">
                 <ngx-gallery [options]="galleryOptions" [images]="galleryImages" 
                     style="display: inline-block; margin-bottom: 20px;"></ngx-gallery>
             </tab>
-            <tab heading="Notes">
-                <p>Notes will go here</p>
+            <tab heading="Notes" (selectTab)="onTabActivated($event)">
+                <app-equipment-notes [notes]="notes" [username]="equipment.username"></app-equipment-notes>
             </tab>
         </tabset>
     </div>

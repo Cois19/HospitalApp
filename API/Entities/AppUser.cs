@@ -24,5 +24,7 @@ namespace API.Entities
         public ICollection<Photo> Photos { get; set; }
         public ICollection<UserMark> MarkedByUsers { get; set; }
         public ICollection<UserMark> MarkedUsers { get; set; }
+        public ICollection<Note> NotesSent { get; set; }
+        public ICollection<Note> NotesReceived { get; set; }
     }
 }

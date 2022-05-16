@@ -12,7 +12,6 @@ import { RegisterComponent } from './register/register.component';
 import { EquipmentListComponent } from './equipments/equipment-list/equipment-list.component';
 import { EquipmentDetailComponent } from './equipments/equipment-detail/equipment-detail.component';
 import { ListsComponent } from './lists/lists.component';
-import { MessagesComponent } from './messages/messages.component';
 import { SharedModule } from './_modules/shared.module';
 import { TestErrorsComponent } from './errors/test-errors/test-errors.component';
 import { ErrorInterceptor } from './_interceptors/error.interceptor';
@@ -26,6 +25,8 @@ import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 import { PhotoEditorComponent } from './equipments/photo-editor/photo-editor.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { DateInputComponent } from './_forms/date-input/date-input.component';
+import { NotesComponent } from './notes/notes.component';
+import { EquipmentNotesComponent } from './equipments/equipment-notes/equipment-notes.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,6 @@ import { DateInputComponent } from './_forms/date-input/date-input.component';
     EquipmentListComponent,
     EquipmentDetailComponent,
     ListsComponent,
-    MessagesComponent,
     TestErrorsComponent,
     NotFoundComponent,
     ServerErrorComponent,
@@ -44,7 +44,9 @@ import { DateInputComponent } from './_forms/date-input/date-input.component';
     EquipmentEditComponent,
     PhotoEditorComponent,
     TextInputComponent,
-    DateInputComponent
+    DateInputComponent,
+    NotesComponent,
+    EquipmentNotesComponent
   ],
   imports: [
     BrowserModule,

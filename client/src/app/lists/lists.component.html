@@ -8,7 +8,7 @@
             <button class="btn btn-primary" btnRadio="marked" 
                 [(ngModel)]="predicate" (click)="loadMarks()">Equipment in maintenance</button>
             <button class="btn btn-primary" btnRadio="markedBy" 
-                [(ngModel)]="predicate" (click)="loadMarks()">Equipments finished maintenance</button>
+                [(ngModel)]="predicate" (click)="loadMarks()">Equipment finished maintenance</button>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-center" *ngIf="pagination">
+<div class="d-flex justify-content-center" *ngIf="pagination && equipments?.length > 0">
     <pagination 
       [boundaryLinks]="true" 
       [totalItems]="pagination.totalItems" 

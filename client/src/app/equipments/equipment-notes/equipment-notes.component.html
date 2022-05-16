@@ -1,0 +1,44 @@
+<div class="card">
+    <div class="card-body">
+        <div *ngIf="notes?.length === 0">
+            No notes yet..
+        </div>
+
+        <ul *ngIf="notes?.length > 0" class="chat">
+            <li *ngFor="let note of notes">
+                <div>
+                    <span class="chat-img float-right">
+                        <img class="rounded-circle" src="{{note.senderPhotoUrl || './assets/user.webp'}}" 
+                            alt="{{note.senderUsername}}">
+                    </span>
+                    <div class="chat-body">
+                        <div class="header">
+                            <small class="text-muted">
+                                <span class="fa fa-clock-o">{{note.noteSent | timeago}}</span>
+                                <span class="text-danger" *ngIf="!note.dateRead && note.senderUsername !== username">
+                                    (unread)
+                                </span>
+                                <span class="text-success" *ngIf="note.dateRead && note.senderUsername !== username">
+                                    (read {{note.dateRead | timeago}})
+                                </span>
+                            </small>
+                        </div>
+                        <p>{{note.content}}</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card-footer">
+        <form #noteForm="ngForm" (ngSubmit)="sendNote()" autocomplete="off">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" placeholder="Write notes for the equipment"
+                    name="noteContent" required [(ngModel)]="noteContent">
+                <div class="input-group-append">
+                    <button [disabled]="!noteForm.valid" class="btn btn-primary" type="submit">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
