@@ -14,5 +14,26 @@ namespace API.Data
         }
 
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<UserMark> Marks { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<UserMark>()
+                .HasKey(k => new {k.SourceUserId, k.MarkedUserId});
+
+            builder.Entity<UserMark>()
+                .HasOne(s => s.SourceUser)
+                .WithMany(l => l.MarkedUsers)
+                .HasForeignKey(s => s.SourceUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<UserMark>()
+                .HasOne(s => s.MarkedUser)
+                .WithMany(l => l.MarkedByUsers)
+                .HasForeignKey(s => s.MarkedUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

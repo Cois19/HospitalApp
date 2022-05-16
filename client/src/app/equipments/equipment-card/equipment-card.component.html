@@ -5,8 +5,8 @@
             <li class="list-inline-item"><button routerLink="/equipments/{{equipment.username}}" class="btn btn-primary">
                 <i class="fa fa-medkit"></i></button>
             </li>
-            <li class="list-inline-item"><button class="btn btn-primary">
-                <i class="fa fa-sticky-note"></i></button>
+            <li class="list-inline-item"><button (click)="addLike(equipment)" class="btn btn-primary">
+                <i class="fa fa-check"></i></button>
             </li>
             <li class="list-inline-item"><button class="btn btn-primary">
                 <i class="fa fa-sticky-note"></i></button>

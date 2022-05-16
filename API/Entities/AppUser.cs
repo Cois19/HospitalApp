@@ -22,10 +22,7 @@ namespace API.Entities
         public string Category { get; set; }
         public string Hospital { get; set; }
         public ICollection<Photo> Photos { get; set; }
-
-        // public int GetAge()
-        // {
-        //     return DateOfProduction.CalculateAge();
-        // }
+        public ICollection<UserMark> MarkedByUsers { get; set; }
+        public ICollection<UserMark> MarkedUsers { get; set; }
     }
 }

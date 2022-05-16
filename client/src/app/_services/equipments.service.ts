@@ -87,6 +87,16 @@ export class EquipmentsService {
     return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
   }
 
+  addMark(username: string) {
+    return this.http.post(this.baseUrl + 'marks/' + username, {});
+  }
+
+  getMarks(predicate: string, pageNumber, pageSize) {
+    let params = this.getPaginationHeaders(pageNumber, pageSize);
+    params = params.append('predicate', predicate);
+    return this.getPaginatedResult<Partial<Equipment[]>>(this.baseUrl + 'marks', params);
+  }
+
   private getPaginatedResult<T>(url, params) {
     const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
     return this.http.get<T>(url, { observe: 'response', params }).pipe(
